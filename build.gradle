@@ -55,6 +55,8 @@ test {
     useTestNG() {
         listeners << 'io.github.mkgerasimenko.listeners.VideoRecordingListener'
         listeners << 'io.github.mkgerasimenko.listeners.ReadersListener'
+
+        listeners << 'io.github.sskorol.core.DataProviderTransformer'
         listeners << 'io.github.sskorol.listeners.BeforeMethodListener'
 
         String suite = project.hasProperty("suite") ? project.property("suite") : System.getenv("SUITE")

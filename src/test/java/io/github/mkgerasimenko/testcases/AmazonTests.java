@@ -1,7 +1,11 @@
 package io.github.mkgerasimenko.testcases;
 
+import io.github.mkgerasimenko.datasuppliers.Data;
+import io.github.mkgerasimenko.datasuppliers.DataSuppliers;
+import io.github.mkgerasimenko.model.Parfume;
 import io.github.mkgerasimenko.pages.SearchPage;
 import io.qameta.allure.*;
+import io.vavr.control.Try;
 import org.testng.annotations.Test;
 
 import static io.github.mkgerasimenko.core.PageFactory.open;
@@ -11,14 +15,17 @@ import static io.github.mkgerasimenko.core.PageFactory.open;
  */
 public class AmazonTests {
 
-    @Test(description = "Should search for keyword")
+    @Data(source = "parfume.json", entity = Parfume.class)
+    @Test(dataProvider = "getData", dataProviderClass = DataSuppliers.class)
     @Feature("Search")
     @Story("Implement search functionality")
     @Issue("35")
     @TmsLink("35")
     @Severity(SeverityLevel.BLOCKER)
-    public void shouldSearchForKeyword() {
+    public void shouldSearchForKeyword(final Parfume parfume) {
         open(SearchPage.class)
-                .searchFor("Automation");
+                .searchFor(parfume.getName() + " " + parfume.getAmount());
+
+        Try.run(() -> Thread.sleep(3000));
     }
 }
