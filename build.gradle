@@ -41,6 +41,7 @@ task wrapper(type: Wrapper) {
     gradleVersion '4.3.1'
 }
 
+
 task copyConfig(type: Copy) {
     from 'src/test/resources/config'
     into 'build/allure-results'
@@ -52,7 +53,8 @@ test.doFirst {
 
 test {
     useTestNG() {
-        listeners << 'io.github.mkgerasimenko.core.VideoRecordingListener'
+        listeners << 'io.github.mkgerasimenko.listeners.VideoRecordingListener'
+        listeners << 'io.github.mkgerasimenko.listeners.ReadersListener'
         listeners << 'io.github.sskorol.listeners.BeforeMethodListener'
 
         String suite = project.hasProperty("suite") ? project.property("suite") : System.getenv("SUITE")
