@@ -41,4 +41,3 @@ public class DataSuppliers {
                 .orElseThrow(() -> new NoClassDefFoundError("No Data class found"));
     }
 }
-

@@ -5,7 +5,6 @@ import io.github.mkgerasimenko.datasuppliers.DataSuppliers;
 import io.github.mkgerasimenko.model.Parfume;
 import io.github.mkgerasimenko.pages.SearchPage;
 import io.qameta.allure.*;
-import io.vavr.control.Try;
 import org.testng.annotations.Test;
 
 import static io.github.mkgerasimenko.core.PageFactory.open;
@@ -25,7 +24,5 @@ public class AmazonTests {
     public void shouldSearchForKeyword(final Parfume parfume) {
         open(SearchPage.class)
                 .searchFor(parfume.getName() + " " + parfume.getAmount());
-
-        Try.run(() -> Thread.sleep(3000));
     }
 }
