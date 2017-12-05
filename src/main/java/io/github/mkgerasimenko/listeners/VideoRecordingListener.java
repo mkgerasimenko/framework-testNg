@@ -1,4 +1,4 @@
-package io.github.mkgerasimenko.core;
+package io.github.mkgerasimenko.listeners;
 
 import io.github.mkgerasimenko.utils.AttachmentUtils;
 import org.testng.IInvokedMethod;

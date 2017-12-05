@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Smoke">
-    <test name="Chrome group">
+    <test name="Amazon group 1">
         <parameter name="browserName" value="chrome"/>
         <parameter name="platform" value="LINUX"/>
         <classes>
