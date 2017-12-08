@@ -8,13 +8,14 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Parfume extends Product {
+public class Shoes extends Product {
 
     private String subCategory;
-    private String amount;
+    private String type;
+    private String size;
     private String color;
 
-    public Parfume(final String name, final String price, final String category) {
-        super(name, price, category);
+    public Shoes(final String name, final String price, final String generalCategory) {
+        super(name, price, generalCategory);
     }
 }
