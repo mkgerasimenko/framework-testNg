@@ -39,9 +39,9 @@ public class AmazonTests {
     @Test(dataProvider = "getData", dataProviderClass = DataSuppliers.class)
     @Feature("Product search")
     @Story("Implement search functionality")
-    @Issue("35")
-    @TmsLink("35")
-    @Severity(SeverityLevel.BLOCKER)
+    @Issue("36")
+    @TmsLink("36")
+    @Severity(SeverityLevel.MINOR)
     public void shouldSearchForShoes(final Shoes shoes) {
 
         open(SearchPage.class)

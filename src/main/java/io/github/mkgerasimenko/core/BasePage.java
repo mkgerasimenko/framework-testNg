@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import static io.github.mkgerasimenko.utils.ElementTypeUtils.*;
-import static io.github.mkgerasimenko.utils.RegexpUtils.clickOn;
+import static io.github.mkgerasimenko.utils.RegexpUtils.getMappedElement;
 import static io.github.mkgerasimenko.wait.WaitCondition.*;
 import static io.github.sskorol.listeners.BaseListener.getDriverMetaData;
 import static java.util.Optional.ofNullable;
@@ -108,8 +108,8 @@ public abstract class BasePage implements Page {
     }
 
     public void selectColor(final By locator, final String regexp, final String value) {
-        clickOn(listOf(waitFor(locator, "", "", allVisible)),
-                regexp, getHTMLofAccessCodePage(), value);
+        getMappedElement(listOf(waitFor(locator, "", "", allVisible)),
+                regexp, getHTMLofAccessCodePage(), value).click();
     }
 
     protected String getText(final By locator) {

@@ -19,26 +19,32 @@ import static io.github.mkgerasimenko.core.BaseConfig.BASE_CONFIG;
 @UtilityClass
 public final class RegexpUtils {
 
-    public static void clickOn(final List<WebElement> webElements,
-                               final String regexp,
-                               final String accessCodeHtml,
-                               final String value) {
+    public static WebElement getMappedElement(final List<WebElement> webElements,
+                                              final String regexp,
+                                              final String accessCodeHtml,
+                                              final String value) {
 
         final Map<String, WebElement> hashMap = new LinkedHashMap<>();
+
+        for (int i = 0; i < webElements.size(); i++) {
+            hashMap.put(getValuesByGroup(regexp, accessCodeHtml, BASE_CONFIG.regexpGroup()).get(i), webElements.get(i));
+        }
+
+        return hashMap.get(value);
+    }
+
+    public static List<String> getValuesByGroup(final String regexp,
+                                                final String condition,
+                                                final int group) {
 
         final List<String> arrayList = new ArrayList<>();
 
         final Pattern p = Pattern.compile(regexp);
-        final Matcher m = p.matcher(accessCodeHtml);
+        final Matcher m = p.matcher(condition);
 
         while (m.find()) {
-            arrayList.add(m.group(BASE_CONFIG.regexpGroup()));
+            arrayList.add(m.group(group));
         }
-
-        for (int i = 0; i < arrayList.size(); i++) {
-            hashMap.put(arrayList.get(i), webElements.get(i));
-        }
-
-        hashMap.get(value).click();
+        return arrayList;
     }
 }

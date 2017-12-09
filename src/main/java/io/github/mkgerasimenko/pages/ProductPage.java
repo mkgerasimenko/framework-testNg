@@ -35,7 +35,6 @@ public class ProductPage extends BasePage {
     }
 
     @Override
-
     public String url() {
         return BASE_CONFIG.url();
     }
