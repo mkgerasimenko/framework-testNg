@@ -1,7 +1,6 @@
 package io.github.mkgerasimenko.listeners;
 
 import io.github.mkgerasimenko.data.api.DataReader;
-import lombok.extern.slf4j.Slf4j;
 import one.util.streamex.StreamEx;
 import org.apache.commons.lang3.NotImplementedException;
 import org.testng.ISuite;
@@ -13,7 +12,6 @@ import java.util.List;
 import static io.github.mkgerasimenko.utils.ServiceLoaderUtils.load;
 import static org.apache.commons.io.FilenameUtils.getExtension;
 
-@Slf4j
 @SuppressWarnings("JavadocType")
 public class ReadersListener implements ISuiteListener {
 

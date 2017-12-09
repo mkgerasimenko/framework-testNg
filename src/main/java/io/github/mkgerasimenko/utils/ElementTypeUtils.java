@@ -11,10 +11,14 @@ import java.util.List;
  */
 @SuppressWarnings({"HideUtilityClassConstructor", "PMD.UseUtilityClass"})
 @UtilityClass
-public class ElementTypeUtils {
+public final class ElementTypeUtils {
 
     public static <T> WebElement elementOf(final T element) {
         return (WebElement) element;
+    }
+
+    public static <T> boolean booleanOf(final T element) {
+        return (Boolean) element;
     }
 
     @SuppressWarnings("unchecked")

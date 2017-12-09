@@ -6,13 +6,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 
 import static io.github.mkgerasimenko.core.BaseConfig.BASE_CONFIG;
-import static io.github.mkgerasimenko.core.WaitCondition.enabled;
+import static io.github.mkgerasimenko.wait.WaitCondition.enabled;
 
 @SuppressWarnings("JavadocType")
 public class SearchPage extends BasePage {
 
     private final By inputSearch = By.id("twotabsearchtextbox");
-    private final By linkSearchResults = By.cssSelector("#rso h3 > a");
 
     @Step("Search for \"{text}\".")
     public SearchPage searchFor(final String text) {
@@ -20,8 +19,9 @@ public class SearchPage extends BasePage {
         return this;
     }
 
-    public int getLinksAmount() {
-        return getTextNodes(linkSearchResults).size();
+    public SearchPage selectCategoryBy(final String category) {
+        selectCategory(category);
+        return this;
     }
 
     @Override
