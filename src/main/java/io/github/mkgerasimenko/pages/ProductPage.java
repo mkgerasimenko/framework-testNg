@@ -4,6 +4,7 @@ import io.github.mkgerasimenko.core.BasePage;
 import org.openqa.selenium.By;
 
 import static io.github.mkgerasimenko.core.BaseConfig.BASE_CONFIG;
+import static io.github.mkgerasimenko.utils.ConvertUnitUtils.convert;
 
 @SuppressWarnings("JavadocType")
 public class ProductPage extends BasePage {
@@ -20,7 +21,7 @@ public class ProductPage extends BasePage {
     }
 
     public ProductPage selectBy(final String condition) {
-        selectByParameters(sizes, condition);
+        selectByParameters(sizes, convert(condition));
         return this;
     }
 
