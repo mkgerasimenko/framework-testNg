@@ -7,6 +7,8 @@ import org.testng.IInvokedMethodListener;
 import org.testng.ITestResult;
 import org.testng.internal.TestResult;
 
+import static org.testng.ITestResult.SUCCESS;
+
 @Slf4j
 @SuppressWarnings("JavadocType")
 public class SoftAssertListener implements IInvokedMethodListener {
@@ -20,7 +22,7 @@ public class SoftAssertListener implements IInvokedMethodListener {
 
     @Override
     public void afterInvocation(final IInvokedMethod method, final ITestResult testResult) {
-        if (method.getTestMethod().isTest() && testResult.getStatus() == ITestResult.SUCCESS) {
+        if (method.getTestMethod().isTest() && testResult.getStatus() == SUCCESS) {
             try {
                 getSoftAssert().assertAll();
             } catch (AssertionError e) {

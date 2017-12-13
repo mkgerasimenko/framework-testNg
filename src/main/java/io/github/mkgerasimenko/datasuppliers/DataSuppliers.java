@@ -21,7 +21,7 @@ public class DataSuppliers {
                 .map(data -> StreamEx.of(data)
                         .flatMap(dataIn -> Arrays.stream(getImplByDataSource(dataIn.source())
                                 .readFrom(dataIn.source(), (Class<T>) dataIn.entity()))).toArray())
-                .orElseThrow(() -> new NoClassDefFoundError("No Data class found"));
+                .orElseThrow(() -> new NoClassDefFoundError("Data class not found"));
     }
 
     @SuppressWarnings("unchecked")
