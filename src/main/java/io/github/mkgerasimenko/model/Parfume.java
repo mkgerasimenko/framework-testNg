@@ -11,10 +11,10 @@ import lombok.EqualsAndHashCode;
 public class Parfume extends Product {
 
     private String subCategory;
-    private String amount;
-    private String color;
+    private String size;
+    private String scent;
 
-    public Parfume(final String name, final String price, final String category) {
-        super(name, price, category);
+    public Parfume(String name, String generalCategory, String purchaseStatus) {
+        super(name, generalCategory, purchaseStatus);
     }
 }
