@@ -7,6 +7,7 @@ group 'io.github.mkgerasimenko'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'jacoco'
 
 sourceCompatibility = 1.8
 
@@ -55,6 +56,7 @@ test {
     useTestNG() {
         listeners << 'io.github.mkgerasimenko.listeners.VideoRecordingListener'
         listeners << 'io.github.mkgerasimenko.listeners.ReadersListener'
+        listeners << 'io.github.mkgerasimenko.listeners.SoftAssertListener'
 
         listeners << 'io.github.sskorol.core.DataProviderTransformer'
         listeners << 'io.github.sskorol.listeners.BeforeMethodListener'
@@ -73,4 +75,14 @@ test.dependsOn copyConfig
 allure {
     autoconfigure = true
     version = '2.4.1'
+}
+
+jacocoTestReport {
+    executionData = files("${buildDir}/jacoco/test.exec")
+    reports {
+        xml.enabled = true
+        xml.destination file("${buildDir}/reports/jacoco/report.xml")
+        html.enabled = true
+        html.destination file("${buildDir}/reports/jacocoHtml")
+    }
 }

@@ -17,6 +17,8 @@ import static io.github.mkgerasimenko.utils.RegexpUtils.getMappedElement;
 import static io.github.mkgerasimenko.wait.WaitCondition.*;
 import static io.github.sskorol.listeners.BaseListener.getDriverMetaData;
 import static java.util.Optional.ofNullable;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Parent class for all PageObjects. Defines common actions, like clicks, selections, etc.
@@ -25,10 +27,14 @@ public abstract class BasePage implements Page {
 
     private final WebDriver driver;
     private final WebDriverWait wait;
+    private final WebDriver mockDriver;
+    private final WebElement mockElement;
 
     public BasePage() {
         this.driver = getDriverMetaData()._1;
         this.wait = getDriverMetaData()._2;
+        this.mockDriver = mock(WebDriver.class);
+        this.mockElement = mock(WebElement.class);
     }
 
     @Step("Navigate to {url}")
@@ -49,6 +55,11 @@ public abstract class BasePage implements Page {
         if (booleanOf(waitFor(locator, value, "", condition))) {
             click(locator);
         }
+    }
+
+    protected void phantomClick(final By locator) {
+        when(mockDriver.findElement(locator)).thenReturn(mockElement);
+        mockDriver.findElement(locator).click();
     }
 
     protected void type(final By locator, final CharSequence text) {
@@ -72,6 +83,11 @@ public abstract class BasePage implements Page {
                         final WaitCondition condition,
                         final String verifiedValue) {
         elementOf(waitFor(locator, verifiedValue, "", condition)).sendKeys(text);
+    }
+
+    protected void phantomType(final By locator, final CharSequence text) {
+        when(mockDriver.findElement(locator)).thenReturn(mockElement);
+        mockDriver.findElement(locator).sendKeys(text);
     }
 
     protected void clearInputField(final By locator) {
@@ -99,17 +115,20 @@ public abstract class BasePage implements Page {
                 .ifPresent(WebElement::click);
     }
 
-    public void selectProductBy(final By locator, final String value) {
-
-        streamOf(waitFor(locator, "", "", allVisible))
-                .filter(webElement -> webElement.getText().contains(value))
-                .findFirst()
-                .ifPresent(WebElement::click);
+    protected void selectProduct(final By locator) {
+        click(locator);
     }
 
     public void selectColor(final By locator, final String regexp, final String value) {
         getMappedElement(listOf(waitFor(locator, "", "", allVisible)),
                 regexp, getHTMLofAccessCodePage(), value).click();
+    }
+
+    protected void selectByAttribute(final By locator, final String value) {
+        streamOf(waitFor(locator, "", "", allVisible))
+                .filter(webElement -> webElement.getAttribute("alt").equals(value))
+                .findFirst()
+                .ifPresent(WebElement::click);
     }
 
     protected String getText(final By locator) {
@@ -139,6 +158,12 @@ public abstract class BasePage implements Page {
         return booleanOf(waitFor(locator, value, attr, attributeToBe))
                 ? value
                 : "";
+    }
+
+    protected String getPhantomText(final By locator, final String value) {
+        when(mockElement.getText()).thenReturn(value);
+        when(mockDriver.findElement(locator)).thenReturn(mockElement);
+        return mockDriver.findElement(locator).getText();
     }
 
     private String getHTMLofAccessCodePage() {

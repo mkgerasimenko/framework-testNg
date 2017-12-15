@@ -4,7 +4,7 @@ import io.github.sskorol.core.DataSupplier;
 import one.util.streamex.StreamEx;
 
 import java.lang.reflect.Method;
-import java.util.Optional;
+import java.util.Arrays;
 
 import static io.github.mkgerasimenko.listeners.ReadersListener.getImplByDataSource;
 import static java.util.Optional.ofNullable;
@@ -17,24 +17,16 @@ public class DataSuppliers {
     @SuppressWarnings("unchecked")
     @DataSupplier(transpose = true)
     public <T> T[] getDataCollection(final Method method) {
-        final Optional<Data[]> annotationsByType = ofNullable(method.getAnnotationsByType(Data.class));
-        if (!annotationsByType.isPresent()) {
-            throw new NoClassDefFoundError("Data class not found");
-        }
-        return (T[]) StreamEx.of(annotationsByType)
-                .flatMap(StreamEx::of)
-                .flatMap(data -> StreamEx.of(getImplByDataSource(data.source())
-                        .readFrom(data.source(), (Class<T>) data.entity())))
-                .toArray();
-    }
-
-    @DataSupplier(flatMap = true)
-    public <T> StreamEx<T> getData(final Method method) {
-        return getTypeByProvidedInfo(method);
+        return (T[]) ofNullable(method.getAnnotationsByType(Data.class))
+                .map(data -> StreamEx.of(data)
+                        .flatMap(dataIn -> Arrays.stream(getImplByDataSource(dataIn.source())
+                                .readFrom(dataIn.source(), (Class<T>) dataIn.entity()))).toArray())
+                .orElseThrow(() -> new NoClassDefFoundError("Data class not found"));
     }
 
     @SuppressWarnings("unchecked")
-    private <T> StreamEx<T> getTypeByProvidedInfo(final Method method) {
+    @DataSupplier(flatMap = true)
+    public <T> StreamEx<T> getData(final Method method) {
         return ofNullable(method.getDeclaredAnnotation(Data.class))
                 .map(data -> StreamEx.of(getImplByDataSource(data.source())
                         .readFrom(data.source(), (Class<T>) data.entity())))
