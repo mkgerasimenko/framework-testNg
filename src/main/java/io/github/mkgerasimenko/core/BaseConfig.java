@@ -20,8 +20,4 @@ public interface BaseConfig extends Config, Reloadable {
     @Key("separator")
     @DefaultValue(",")
     String separator();
-
-    @Key("regexpGroup")
-    @DefaultValue("1")
-    int regexpGroup();
 }

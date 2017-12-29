@@ -2,7 +2,7 @@
 <suite name="Smoke">
     <test name="Amazon group 1">
         <parameter name="browserName" value="chrome"/>
-        <parameter name="platform" value="LINUX"/>
+        <parameter name="platformName" value="LINUX"/>
         <classes>
             <class name="io.github.mkgerasimenko.testcases.AmazonTests"/>
         </classes>

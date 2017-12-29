@@ -9,11 +9,9 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 import static io.github.mkgerasimenko.utils.ElementTypeUtils.*;
-import static io.github.mkgerasimenko.utils.RegexpUtils.getMappedElement;
 import static io.github.mkgerasimenko.wait.WaitCondition.*;
 import static io.github.sskorol.listeners.BaseListener.getDriverMetaData;
 import static java.util.Optional.ofNullable;
@@ -102,45 +100,22 @@ public abstract class BasePage implements Page {
         new Select(waitFor(locator, "", "", visible)).selectByVisibleText(text);
     }
 
-    protected void selectCategory(final String category) {
-        Optional.of(By.linkText(category))
-                .ifPresent(this::click);
-    }
-
     public void selectByParameters(final By locator, final String value) {
-
         streamOf(waitFor(locator, "", "", allVisible))
                 .filter(webElement -> webElement.getText().equals(value))
                 .findFirst()
                 .ifPresent(WebElement::click);
     }
 
-    protected void selectProduct(final By locator) {
-        click(locator);
-    }
-
-    public void selectColor(final By locator, final String regexp, final String value) {
-        getMappedElement(listOf(waitFor(locator, "", "", allVisible)),
-                regexp, getHTMLofAccessCodePage(), value).click();
-    }
-
-    protected void selectByAttribute(final By locator, final String value) {
+    protected void selectByAttribute(final By locator, final String value, final String attribute) {
         streamOf(waitFor(locator, "", "", allVisible))
-                .filter(webElement -> webElement.getAttribute("alt").equals(value))
+                .filter(webElement -> webElement.getAttribute(attribute).equals(value))
                 .findFirst()
                 .ifPresent(WebElement::click);
     }
 
     protected String getText(final By locator) {
         return elementOf(waitFor(locator, "", "", visible)).getText();
-    }
-
-    protected String getText(final By locator, final WaitCondition condition) {
-        return elementOf(waitFor(locator, "", "", condition)).getText();
-    }
-
-    protected List<String> getTextNodes(final By locator) {
-        return getTextNodes(locator, allPresent);
     }
 
     protected List<String> getTextNodes(final By locator, final WaitCondition condition) {
@@ -164,10 +139,6 @@ public abstract class BasePage implements Page {
         when(mockElement.getText()).thenReturn(value);
         when(mockDriver.findElement(locator)).thenReturn(mockElement);
         return mockDriver.findElement(locator).getText();
-    }
-
-    private String getHTMLofAccessCodePage() {
-        return driver.getPageSource();
     }
 
     @SuppressWarnings("unchecked")

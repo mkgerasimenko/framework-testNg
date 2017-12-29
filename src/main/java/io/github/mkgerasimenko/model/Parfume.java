@@ -1,20 +1,21 @@
 package io.github.mkgerasimenko.model;
 
+import io.github.mkgerasimenko.customannotation.Source;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * A simple model class for Parfume processing.
+ * A simple model class for processing Parfume object.
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Source(source = "parfume.json")
 public class Parfume extends Product {
 
-    private String subCategory;
-    private String size;
+    private String amount;
     private String scent;
 
-    public Parfume(final String name, final String generalCategory, final String purchaseStatus) {
-        super(name, generalCategory, purchaseStatus);
+    public Parfume(final String name, final String generalCategory, final String subCategory) {
+        super(name, generalCategory, subCategory);
     }
 }

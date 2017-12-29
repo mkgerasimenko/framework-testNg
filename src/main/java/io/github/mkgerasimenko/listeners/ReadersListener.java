@@ -2,34 +2,36 @@ package io.github.mkgerasimenko.listeners;
 
 import io.github.mkgerasimenko.data.api.DataReader;
 import one.util.streamex.StreamEx;
-import org.apache.commons.lang3.NotImplementedException;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.mkgerasimenko.utils.ServiceLoaderUtils.load;
+import static io.github.sskorol.utils.ServiceLoaderUtils.load;
+import static java.lang.ClassLoader.getSystemClassLoader;
 import static org.apache.commons.io.FilenameUtils.getExtension;
 
-@SuppressWarnings("JavadocType")
+/**
+ * Listener for the implementation data reading from files.
+ */
 public class ReadersListener implements ISuiteListener {
 
     private static final List<DataReader> READERS = new ArrayList<>();
 
+    public static DataReader readerOf(final String dataSource) {
+        return StreamEx.of(load(DataReader.class, getSystemClassLoader()))
+                .findFirst(dataReader -> dataReader.getEntityType().equals(getExtension(dataSource)))
+                .orElseThrow(() -> new IllegalArgumentException("Unable to read " + dataSource));
+    }
+
     @Override
     public void onStart(final ISuite suite) {
-        READERS.addAll(load(DataReader.class, ClassLoader.getSystemClassLoader()));
+        READERS.addAll(load(DataReader.class, getSystemClassLoader()));
     }
 
     @Override
     public void onFinish(final ISuite suite) {
         READERS.clear();
-    }
-
-    public static DataReader getImplByDataSource(final String dataSource) {
-        return StreamEx.of(READERS)
-                .findFirst(impl -> impl.getEntityType().equals(getExtension(dataSource)))
-                .orElseThrow(() -> new NotImplementedException("No implement found"));
     }
 }
