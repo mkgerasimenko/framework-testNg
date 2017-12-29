@@ -11,7 +11,6 @@ This project provides automated test example framework for [**_Amazon_**](https:
 4. **_Montale Wild Pears Parfum_** (50 milliliters) for your girlfriend.
 5. **_Red NIKE running shoes_** (42 EU size) for your boyfriend.
 
-
 ## 1. Configuration details:
 The project uses **TestNG**  testing framework and **Allure** test report framework to create test execution reports.
 **Gradle** configure project build automation.
