@@ -1,60 +1,75 @@
 package io.github.mkgerasimenko.pages;
 
 import io.github.mkgerasimenko.core.BasePage;
+import io.github.mkgerasimenko.model.Category;
+import io.github.mkgerasimenko.model.SortValues;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
 import static io.github.mkgerasimenko.core.BaseConfig.BASE_CONFIG;
-import static io.github.mkgerasimenko.utils.ConvertUnitUtils.convert;
+import static io.github.mkgerasimenko.wait.WaitCondition.enabled;
+import static java.lang.String.format;
 
 @SuppressWarnings("JavadocType")
 public class ProductPage extends BasePage {
 
-    private static final String REGEXP_FOR_COLOR = ".colorsprite.*(\\n*\\t*.*).a-size-small a-color-base.>(.*?)<";
     private static final String PURCHASE_STATUS = "Operation was successfully completed";
-    private final By checkboxes = By.cssSelector(".a-label.a-checkbox-label");
     private final By resultProducts = By.xpath("//ul[@id='s-results-list-atf']/li");
-    private final By colors = By.cssSelector(".colorsprite");
-    private final By scents = By.xpath("(//img[@id=''])");
     private final By getAllScentsButton = By.id("expanderButton_scent_name");
     private final By buyButton = By.id("buy");
-    private final By sizes = By.cssSelector(".buttonsprite");
 
-    public ProductPage selectByColor(final String color) {
-        selectColor(colors, REGEXP_FOR_COLOR, color);
+    @Step("Select the category: \"{category}\" and color: \"{value}\".")
+    public ProductPage selectColor(final Category category, final String value) {
+        click(By.xpath(format("//h4[.=\"%s\"]/following::ul[position() mod 3]//span[text()=\"%s\"]/../..",
+                category.getCategory(),
+                value)));
         return this;
     }
 
-    @Step("Select the following category \"{category}\".")
-    public ProductPage selectCategoryBy(final String category) {
-        selectCategory(category);
+    @Step("Select the category: \"{category}\" and choose: \"{value}\".")
+    public ProductPage chooseTo(final Category category, final String value) {
+        click(By.xpath(format("//h4[.=\"%s\"]/following::ul[position() mod 2]//span[text()=\"%s\"]",
+                category.getCategory(),
+                value)));
         return this;
     }
 
-    public ProductPage selectBy(final String condition) {
-        selectByParameters(sizes, convert(condition));
+    @Step("Select the category: \"{category}\" and dimension: \"{value}\".")
+    public ProductPage selectDimension(final Category category, final String value) {
+        click(By.xpath(format("//h4[.=\"%s\"]/following::ul[position() mod 3]//span[text()=\"%s\"]",
+                category.getCategory(),
+                value)));
         return this;
     }
 
-    public ProductPage selectCheckboxBy(final String condition) {
-        selectByParameters(checkboxes, condition);
-        return this;
-    }
-
+    @Step("Select the product")
     public ProductPage selectProduct() {
-        selectProduct(resultProducts);
+        click(resultProducts);
         return this;
     }
 
-    @Step("Select the following scent \"{value}\".")
+    @Step("Select the \"{value}\" category.")
+    public ProductPage selectCategory(final String value) {
+        click(By.linkText(value));
+        return this;
+    }
+
+    @Step("Select the \"{value}\" scent.")
     public ProductPage selectScent(final String value) {
         click(getAllScentsButton);
-        selectByAttribute(scents, value);
+        click(By.xpath(format("//*[@alt=\"%s\"]", value)), enabled);
         return this;
     }
 
+    @Step("Buy the product")
     public ProductPage buy() {
         phantomClick(buyButton);
+        return this;
+    }
+
+    @Step("Sort by: \"{value}\".")
+    public ProductPage sortBy(final SortValues value) {
+        click(By.xpath(format("//*[@id='sort']//option[text()=\"%s\"]", value.getName())));
         return this;
     }
 

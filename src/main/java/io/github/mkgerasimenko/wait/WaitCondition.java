@@ -1,7 +1,6 @@
 package io.github.mkgerasimenko.wait;
 
 import io.github.mkgerasimenko.core.TriFunction;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -13,7 +12,6 @@ import java.util.function.Function;
 /**
  * WaitCondition encapsulates complicated ExpectedConditions API behind obvious enum values.
  */
-@Getter
 @RequiredArgsConstructor
 public enum WaitCondition {
 

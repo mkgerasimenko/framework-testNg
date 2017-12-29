@@ -1,6 +1,5 @@
 package io.github.mkgerasimenko.listeners;
 
-import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
@@ -9,7 +8,6 @@ import org.testng.internal.TestResult;
 
 import static org.testng.ITestResult.SUCCESS;
 
-@Slf4j
 @SuppressWarnings("JavadocType")
 public class SoftAssertListener implements IInvokedMethodListener {
 
@@ -17,12 +15,14 @@ public class SoftAssertListener implements IInvokedMethodListener {
 
     @Override
     public void beforeInvocation(final IInvokedMethod method, final ITestResult testResult) {
-        THREAD_LOCAL_CONTAINER_FOR_SOFT_ASSERTIONS.set(new SoftAssertions());
+        if (method.isTestMethod()) {
+            THREAD_LOCAL_CONTAINER_FOR_SOFT_ASSERTIONS.set(new SoftAssertions());
+        }
     }
 
     @Override
     public void afterInvocation(final IInvokedMethod method, final ITestResult testResult) {
-        if (method.getTestMethod().isTest() && testResult.getStatus() == SUCCESS) {
+        if (method.isTestMethod() && testResult.getStatus() == SUCCESS) {
             try {
                 getSoftAssert().assertAll();
             } catch (AssertionError e) {
@@ -30,6 +30,7 @@ public class SoftAssertListener implements IInvokedMethodListener {
                 testResult.setStatus(TestResult.FAILURE);
                 testResult.setThrowable(e);
             }
+            THREAD_LOCAL_CONTAINER_FOR_SOFT_ASSERTIONS.remove();
         }
     }
 

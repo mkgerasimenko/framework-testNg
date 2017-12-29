@@ -1,6 +1,5 @@
 # _Framework prototype for Amazon automation testing_ 
 
-[![Build Status](https://api.travis-ci.org/mkgerasimenko/framework-testNg.svg?branch=master)](https://travis-ci.org/mkgerasimenko/framework-testNg)
 [![codebeat badge](https://codebeat.co/badges/5a472cbd-e98e-4391-ab4d-4d431ca5a53f)](https://codebeat.co/projects/github-com-mkgerasimenko-framework-testng-master)
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://goo.gl/9GLmMZ)
 

@@ -1,51 +1,161 @@
 package io.github.mkgerasimenko.testcases;
 
+import io.github.mkgerasimenko.dataset.*;
 import io.github.mkgerasimenko.datasuppliers.Data;
 import io.github.mkgerasimenko.datasuppliers.DataSuppliers;
 import io.github.mkgerasimenko.model.Account;
-import io.github.mkgerasimenko.model.Parfume;
 import io.github.mkgerasimenko.pages.LoginPage;
 import io.github.mkgerasimenko.pages.ProductPage;
-import io.github.mkgerasimenko.pages.SearchPage;
 import io.qameta.allure.*;
 import org.testng.annotations.Test;
 
-import static io.github.mkgerasimenko.assertions.CustomAssertions.assertThat;
+import static io.github.mkgerasimenko.assertions.CustomAssertions.customAssertThat;
 import static io.github.mkgerasimenko.core.PageFactory.at;
 import static io.github.mkgerasimenko.core.PageFactory.open;
+import static io.github.mkgerasimenko.model.Category.*;
+import static io.github.mkgerasimenko.model.OperationStatus.LOGIN_SUCCESSFUL;
+import static io.github.mkgerasimenko.model.OperationStatus.PURCHASE_SUCCESSFUL;
+import static io.github.mkgerasimenko.model.SortValues.*;
 
 /**
- * A simple class for Google page testing.
+ * Tests for Amazon.com page.
  */
 public class AmazonTests {
 
-    @Data(source = "parfume.json", entity = Parfume.class)
     @Data(source = "accountAmazon.json", entity = Account.class)
-    @Test(dataProvider = "getDataCollection", dataProviderClass = DataSuppliers.class)
+    @Test(dataProvider = "getObject",
+            dataProviderClass = DataSuppliers.class,
+            description = "Should Login")
     @Feature("Product search")
     @Story("Implement search functionality")
-    @Issue("35")
-    @TmsLink("35")
+    @Issue("9")
+    @TmsLink("41")
     @Severity(SeverityLevel.BLOCKER)
-    public void shouldSearchForParfume(final Parfume parfume, final Account account) {
+    public void shouldLogIn(final Account account) {
 
         open(LoginPage.class)
                 .login(account.getUsername(), account.getPassword());
 
-        assertThat(account)
-                .hasLoginStatus(at(LoginPage.class).getLoginStatus());
+        customAssertThat(at(LoginPage.class))
+                .hasLoginStatus(LOGIN_SUCCESSFUL);
+    }
 
-        at(SearchPage.class)
-                .searchFor(parfume.getName());
+    @Data(entity = ShouldSearchForParfume.class)
+    @Test(dataProvider = "getDataSet",
+            dataProviderClass = DataSuppliers.class,
+            description = "Should Search For Parfume")
+    @Feature("Product search")
+    @Story("Implement search functionality")
+    @Issue("9")
+    @TmsLink("14")
+    @Severity(SeverityLevel.BLOCKER)
+    public void shouldSearchForParfume(final ShouldSearchForParfume data) {
 
-        at(ProductPage.class)
-                .selectCategoryBy(parfume.getSubCategory())
-                .selectCheckboxBy(parfume.getSize())
+        open(LoginPage.class)
+                .login(data.getAccount().getUsername(), data.getAccount().getPassword())
+                .searchFor(data.getParfume().getName())
+                .selectCategory(data.getParfume().getSubCategory())
+                .chooseTo(WOMEN_FRAGRANCE_SIZE, data.getParfume().getAmount())
+                .sortBy(PRICE_HIGH_TO_LOW)
                 .selectProduct()
-                .selectScent(parfume.getScent())
+                .selectScent(data.getParfume().getScent())
                 .buy();
 
-        assertThat(parfume)
-                .hasPurchaseStatus(at(ProductPage.class).getPurchaseStatus());
+        customAssertThat(at(ProductPage.class))
+                .hasPurchaseStatus(PURCHASE_SUCCESSFUL);
+    }
+
+    @Data(entity = ShouldSearchForLego.class)
+    @Test(dataProvider = "getDataSet",
+            dataProviderClass = DataSuppliers.class,
+            description = "Should Search For Lego")
+    @Feature("Product search")
+    @Story("Implement search functionality")
+    @Issue("9")
+    @TmsLink("13")
+    @Severity(SeverityLevel.BLOCKER)
+    public void shouldSearchForLego(final ShouldSearchForLego data) {
+
+        open(LoginPage.class)
+                .login(data.getAccount().getUsername(), data.getAccount().getPassword())
+                .searchFor(data.getLego().getName())
+                .chooseTo(TOYS_AGE_RANGE, data.getLego().getAgeRange())
+                .selectProduct()
+                .buy();
+
+        customAssertThat(at(ProductPage.class))
+                .hasPurchaseStatus(PURCHASE_SUCCESSFUL);
+    }
+
+    @Data(entity = ShouldSearchForShoes.class)
+    @Test(dataProvider = "getDataSet",
+            dataProviderClass = DataSuppliers.class,
+            description = "Should Search For Shoes")
+    @Feature("Product search")
+    @Story("Implement search functionality")
+    @Issue("9")
+    @TmsLink("10")
+    @Severity(SeverityLevel.BLOCKER)
+    public void shouldSearchForShoes(final ShouldSearchForShoes data) {
+
+        open(LoginPage.class)
+                .login(data.getAccount().getUsername(), data.getAccount().getPassword())
+                .searchFor(data.getShoes().getName())
+                .selectCategory(data.getShoes().getSubCategory())
+                .selectColor(COLOR, data.getShoes().getColor())
+                .selectDimension(SHOE_SIZE, data.getShoes().getSize())
+                .chooseTo(BRAND, data.getShoes().getBrand())
+                .selectProduct()
+                .buy();
+
+        customAssertThat(at(ProductPage.class))
+                .hasPurchaseStatus(PURCHASE_SUCCESSFUL);
+    }
+
+    @Data(entity = ShouldSearchForTvShow.class)
+    @Test(dataProvider = "getDataSet",
+            dataProviderClass = DataSuppliers.class,
+            description = "Should Search For Tv Show")
+    @Feature("Product search")
+    @Story("Implement search functionality")
+    @Issue("9")
+    @TmsLink("17")
+    @Severity(SeverityLevel.BLOCKER)
+    public void shouldSearchForTvShow(final ShouldSearchForTvShow data) {
+
+        open(LoginPage.class)
+                .login(data.getAccount().getUsername(), data.getAccount().getPassword())
+                .searchFor(data.getTvShow().getName())
+                .selectCategory(data.getTvShow().getSubCategory())
+                .chooseTo(MOVIE_TV, data.getTvShow().getYear())
+                .sortBy(AVG_CUSTOMER_REVIEW)
+                .selectProduct()
+                .buy();
+
+        customAssertThat(at(ProductPage.class))
+                .hasPurchaseStatus(PURCHASE_SUCCESSFUL);
+    }
+
+    @Data(entity = ShouldSearchForPlaystation.class)
+    @Test(dataProvider = "getDataSet",
+            dataProviderClass = DataSuppliers.class,
+            description = "Should Search For Playstation")
+    @Feature("Product search")
+    @Story("Implement search functionality")
+    @Issue("9")
+    @TmsLink("11")
+    @Severity(SeverityLevel.BLOCKER)
+    public void shouldSearchForPlaystation(final ShouldSearchForPlaystation data) {
+
+        open(LoginPage.class)
+                .login(data.getAccount().getUsername(), data.getAccount().getPassword())
+                .searchFor(data.getPlaystation().getName())
+                .selectCategory(data.getPlaystation().getSubCategory())
+                .sortBy(PRICE_LOW_TO_HIGH)
+                .selectProduct()
+                .buy();
+
+        customAssertThat(at(ProductPage.class))
+                .hasPurchaseStatus(PURCHASE_SUCCESSFUL);
     }
 }
