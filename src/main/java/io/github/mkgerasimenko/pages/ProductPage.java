@@ -23,7 +23,6 @@ public class ProductPage extends BasePage {
         click(By.xpath(format("//h4[.=\"%s\"]/following::ul[position() mod 3]//span[text()=\"%s\"]/../..",
                 category.getCategory(),
                 value)));
-
         return this;
     }
 
