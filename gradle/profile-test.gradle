@@ -1,0 +1,18 @@
+test {
+    useTestNG() {
+        listeners << 'io.github.mkgerasimenko.listeners.VideoRecordingListener'
+        listeners << 'io.github.mkgerasimenko.listeners.ReadersListener'
+        listeners << 'io.github.mkgerasimenko.listeners.SoftAssertListener'
+
+        listeners << 'io.github.sskorol.core.DataProviderTransformer'
+        listeners << 'io.github.sskorol.listeners.BeforeMethodListener'
+
+        suites "src/test/resources/smoke-suite.xml"
+    }
+
+    systemProperty 'url', 'https://www.amazon.com'
+    systemProperty 'selenoidUrl', 'http://aws:4444/wd/hub'
+    systemProperty 'allure.results.directory', 'build/allure-results'
+    systemProperty 'allure.link.issue.pattern', 'https://github.com/sskorol/qaa-amazon/issues/{}'
+    systemProperty 'allure.link.tms.pattern', 'https://github.com/sskorol/qaa-amazon/issues/{}'
+}
